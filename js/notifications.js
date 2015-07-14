@@ -106,8 +106,7 @@ weechat.factory('notifications', ['$rootScope', '$log', 'models', 'settings', fu
         title += buffer.fullName.replace(/irc.([^\.]+)\..+/, " ($1)");
 
         var notification = new Notification(title, {
-            body: body,
-            icon: 'assets/img/favicon.png'
+            body: body
         });
 
         // Save notification, so we can close all outstanding ones when disconnecting
