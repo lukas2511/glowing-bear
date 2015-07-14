@@ -1,4 +1,5 @@
 var weechat = angular.module('weechat');
+var ipc = require('ipc');
 
 weechat.factory('notifications', ['$rootScope', '$log', 'models', 'settings', function($rootScope, $log, models, settings) {
     // Ask for permission to display desktop notifications
@@ -57,22 +58,16 @@ weechat.factory('notifications', ['$rootScope', '$log', 'models', 'settings', fu
         }
     };
 
-    var updateFavico = function() {
+    var updateBadge = function() {
         var notifications = unreadCount('notification');
         if (notifications > 0) {
-            $rootScope.favico.badge(notifications, {
-                    bgColor: '#d00',
-                    textColor: '#fff'
-            });
+            ipc.send('badge', notifications);
         } else {
             var unread = unreadCount('unread');
             if (unread === 0) {
-                $rootScope.favico.reset();
+                ipc.send('badge', '');
             } else {
-                $rootScope.favico.badge(unread, {
-                    bgColor: '#5CB85C',
-                    textColor: '#ff0'
-                });
+                ipc.send('badge', unread);
             }
         }
     };
@@ -153,7 +148,7 @@ weechat.factory('notifications', ['$rootScope', '$log', 'models', 'settings', fu
     return {
         requestNotificationPermission: requestNotificationPermission,
         updateTitle: updateTitle,
-        updateFavico: updateFavico,
+        updateBadge: updateBadge,
         createHighlight: createHighlight,
         cancelAll: cancelAll,
         unreadCount: unreadCount

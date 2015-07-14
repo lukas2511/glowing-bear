@@ -1,5 +1,6 @@
 (function() {
 'use strict';
+var ipc = require('ipc');
 
 var weechat = angular.module('weechat', ['ngRoute', 'localStorage', 'weechatModels', 'plugins', 'IrcUtils', 'ngSanitize', 'ngWebsockets', 'ngTouch'], ['$compileProvider', function($compileProvider) {
     // hacky way to be able to find out if we're in debug mode
@@ -35,7 +36,7 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
         'onlyUnread': false,
         'hotlistsync': true,
         'orderbyserver': true,
-        'useFavico': true,
+        'useBadge': true,
         'showtimestamp': true,
         'showtimestampSeconds': false,
         'fontsize': '14px',
@@ -136,7 +137,7 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
                     buffer.unread = 0;
                     buffer.notification = 0;
 
-                    // Trigger title and favico update
+                    // Trigger title and badge update
                     $rootScope.$emit('notificationChanged');
                 }
 
@@ -239,7 +240,6 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
         }
     });
 
-    $rootScope.favico = new Favico({animation: 'none'});
     $scope.notifications = notifications.unreadCount('notification');
     $scope.unread = notifications.unreadCount('unread');
 
@@ -248,8 +248,8 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
         $scope.notifications = notifications.unreadCount('notification');
         $scope.unread = notifications.unreadCount('unread');
 
-        if (settings.useFavico && $rootScope.favico) {
-            notifications.updateFavico();
+        if (settings.useBadge) {
+            notifications.updateBadge();
         }
     });
 
@@ -375,15 +375,15 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
         $rootScope.predicate = orderbyserver ? 'serverSortKey' : 'number';
     });
 
-    settings.addCallback('useFavico', function(useFavico) {
+    settings.addCallback('useBadge', function(useBadge) {
         // this check is necessary as this is called on page load, too
         if (!$rootScope.connected) {
             return;
         }
-        if (useFavico) {
-            notifications.updateFavico();
+        if (useBadge) {
+            notifications.updateBadge();
         } else {
-            $rootScope.favico.reset();
+            ipc.send('badge', '');
         }
     });
 
@@ -747,7 +747,7 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
             if ($rootScope.connected) {
                 $scope.disconnect();
             }
-            $scope.favico.reset();
+            ipc.send('badge', '');
         }
     };
 
