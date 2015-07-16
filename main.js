@@ -203,7 +203,7 @@ app.on('ready', function() {
 	var menu = Menu.buildFromTemplate(template);
 	Menu.setApplicationMenu(menu);
 	var mainWindow = new BrowserWindow({width: 1280, height: 800, 'min-width': 1024, 'min-height': 600, 'web-security': false, 'java': false});
-	mainWindow.loadUrl('file://' + __dirname + '/index.html');
+	mainWindow.loadUrl('file://' + __dirname + '/start.html');
 	ipc.on('badge', function(event, arg) {
 		app.dock.setBadge(String(arg));
 	});
