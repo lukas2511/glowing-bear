@@ -405,7 +405,7 @@ weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout',
                 head.appendChild(script);
                 script = document.createElement("script");
                 script.type = "text/javascript";
-                script.src  = "//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML";
+                script.src  = "3rdparty/mathjax/MathJax.js?config=TeX-AMS_HTML";
                 head.appendChild(script);
             })();
         }
