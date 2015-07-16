@@ -185,7 +185,7 @@ plugins.factory('userPlugins', function() {
         var addMatch = function(match) {
             for (var i = 0; match && i < match.length; i++) {
                 var id = match[i].substr(match[i].length - 22, match[i].length);
-                content.push('<iframe src="//embed.spotify.com/?uri=spotify:track:' + id + '" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>');
+                content.push('<iframe src="https://embed.spotify.com/?uri=spotify:track:' + id + '" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>');
             }
         };
         addMatch(message.match(/spotify:track:([a-zA-Z-0-9]{22})/g));
@@ -287,7 +287,7 @@ plugins.factory('userPlugins', function() {
 
         /* MixCloud */
         if (url.match(/^https?:\/\/([a-z]+\.)?mixcloud.com\//)) {
-            return '<iframe width="480" height="60" src="//www.mixcloud.com/widget/iframe/?feed=' + url + '&mini=1&stylecolor=&hide_artwork=&embed_type=widget_standard&hide_tracklist=1&hide_cover=" frameborder="0"></iframe>';
+            return '<iframe width="480" height="60" src="https://www.mixcloud.com/widget/iframe/?feed=' + url + '&mini=1&stylecolor=&hide_artwork=&embed_type=widget_standard&hide_tracklist=1&hide_cover=" frameborder="0"></iframe>';
         }
     });
 
@@ -371,7 +371,7 @@ plugins.factory('userPlugins', function() {
                     // The script tag needs to be generated manually or the browser won't load it
                     var scriptElem = document.createElement('script');
                     // Hardcoding the URL here, I don't suppose it's going to change anytime soon
-                    scriptElem.src = "//platform.twitter.com/widgets.js";
+                    scriptElem.src = "https://platform.twitter.com/widgets.js";
                     element.appendChild(scriptElem);
                 });
             };
@@ -386,7 +386,7 @@ plugins.factory('userPlugins', function() {
             match = url.match(regexp);
         if (match) {
             var id = match[2], embedurl = "https://vine.co/v/" + id + "/embed/simple?audio=1";
-            return '<iframe class="vine-embed" src="' + embedurl + '" width="600" height="600" frameborder="0"></iframe><script async src="//platform.vine.co/static/scripts/embed.js" charset="utf-8"></script>';
+            return '<iframe class="vine-embed" src="' + embedurl + '" width="600" height="600" frameborder="0"></iframe><script async src="https://platform.vine.co/static/scripts/embed.js" charset="utf-8"></script>';
         }
     });
 
