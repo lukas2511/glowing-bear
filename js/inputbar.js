@@ -251,12 +251,14 @@ weechat.directive('inputBar', function() {
                 }
 
                 // Alt+L -> focus on input bar
+/* Disabled, interfers with OSX keybinding for '@'-character
                 if ($event.altKey && (code === 76 || code === 108)) {
                     $event.preventDefault();
                     inputNode.focus();
                     inputNode.setSelectionRange($scope.command.length, $scope.command.length);
                     return true;
                 }
+*/
 
                 // Alt+< -> switch to previous buffer
                 if ($event.altKey && (code === 60 || code === 226)) {
