@@ -4,6 +4,11 @@ const BrowserWindow = require('browser-window');
 const ipc = require('ipc');
 const Menu = require('menu');
 
+app.on('browser-window-focus', function(e, w) {
+	w.webContents.executeJavaScript('setTimeout(function() { document.getElementById("glowingbear").focus(); }, 0);');
+	w.webContents.executeJavaScript('setTimeout(function() { document.getElementById("glowingbear").executeJavaScript("document.getElementById(\\"sendMessage\\").focus();") }, 0);');
+});
+
 app.on('ready', function() {
 	if (Menu.getApplicationMenu())
 		return;
