@@ -212,6 +212,10 @@ app.on('ready', function() {
 	ipc.on('badge', function(event, arg) {
 		app.dock.setBadge(String(arg));
 	});
+	mainWindow.on('devtools-opened', function() {
+		mainWindow.webContents.executeJavaScript("document.getElementById('glowingbear').openDevTools();");
+	});
+
 	mainWindow.on('closed', function() {
 		app.quit();
 	});
