@@ -195,8 +195,8 @@ weechat.directive('inputBar', function() {
                 var tmpIterCandidate = $scope.iterCandidate;
                 $scope.iterCandidate = null;
 
-                // Left Alt+[0-9] -> jump to buffer
-                if ($event.altKey && !$event.ctrlKey && (code > 47 && code < 58)) {
+                // CMD+[0-9] -> jump to buffer
+                if ($event.metaKey && !$event.ctrlKey && (code > 47 && code < 58)) {
                     if (code === 48) {
                         code = 58;
                     }
@@ -236,32 +236,30 @@ weechat.directive('inputBar', function() {
                     return true;
                 }
 
-                // Left Alt+n -> toggle nicklist
-                if ($event.altKey && !$event.ctrlKey && code === 78) {
+                // CMD+n -> toggle nicklist
+                if ($event.metaKey && !$event.ctrlKey && code === 78) {
                     $event.preventDefault();
                     $rootScope.toggleNicklist();
                     return true;
                 }
 
-                // Alt+A -> switch to buffer with activity
-                if ($event.altKey && (code === 97 || code === 65)) {
+                // CMD+Shift+A -> switch to buffer with activity
+                if ($event.metaKey && $event.shiftKey && (code === 65)) {
                     $event.preventDefault();
                     $rootScope.switchToActivityBuffer();
                     return true;
                 }
 
-                // Alt+L -> focus on input bar
-/* Disabled, interfers with OSX keybinding for '@'-character
-                if ($event.altKey && (code === 76 || code === 108)) {
+                // CMD+L -> focus on input bar
+                if ($event.metaKey && (code === 76 || code === 108)) {
                     $event.preventDefault();
                     inputNode.focus();
                     inputNode.setSelectionRange($scope.command.length, $scope.command.length);
                     return true;
                 }
-*/
 
-                // Alt+< -> switch to previous buffer
-                if ($event.altKey && (code === 60 || code === 226)) {
+/* TODO                // CMD+Left/Up -> switch to previous buffer
+                if ($event.metaKey && (code === 38 || code === 37)) {
                     var previousBuffer = models.getPreviousBuffer();
                     if (previousBuffer) {
                         models.setActiveBuffer(previousBuffer.id);
@@ -270,29 +268,18 @@ weechat.directive('inputBar', function() {
                     }
                 }
 
-                // Double-tap Escape -> disconnect
-                if (code === 27) {
-                    $event.preventDefault();
-
-                    // Check if a modal is visible. If so, close it instead of disconnecting
-                    var modals = document.querySelectorAll('.gb-modal');
-                    for (var modalId = 0; modalId < modals.length; modalId++) {
-                        if (modals[modalId].getAttribute('data-state') === 'visible') {
-                            modals[modalId].setAttribute('data-state', 'hidden');
-                            return true;
-                        }
+                // CMD+Right/Down -> switch to next buffer
+                if ($event.metaKey && (code === 39 || code === 40)) {
+                    var nextBuffer = models.getNextBuffer();
+                    if (nextBuffer) {
+                        models.setActiveBuffer(nextBuffer.id);
+                        $event.preventDefault();
+                        return true;
                     }
+                }*/
 
-                    if (typeof $scope.lastEscape !== "undefined" && (Date.now() - $scope.lastEscape) <= 500) {
-                        // Double-tap
-                        connection.disconnect();
-                    }
-                    $scope.lastEscape = Date.now();
-                    return true;
-                }
-
-                // Alt+G -> focus on buffer filter input
-                if ($event.altKey && (code === 103 || code === 71)) {
+                // CMD+G -> focus on buffer filter input
+                if ($event.metaKey && (code === 103 || code === 71)) {
                     $event.preventDefault();
                     if (!$scope.$parent.isSidebarVisible()) {
                         $scope.$parent.showSidebar();
@@ -397,9 +384,10 @@ weechat.directive('inputBar', function() {
                             inputNode.setSelectionRange($scope.command.length, $scope.command.length);
                         });
                     // Ctrl-w
-                    } else if (code == 87) {
+                    } else if (code === 87 || code === 23) {
                         var trimmedValue = $scope.command.slice(0, caretPos);
-                        var lastSpace = trimmedValue.lastIndexOf(' ') + 1;
+                        var lastSpace = trimmedValue.lastIndexOf(' ');
+                        if (lastSpace == -1) lastSpace = 0;
                         $scope.command = $scope.command.slice(0, lastSpace) + $scope.command.slice(caretPos, $scope.command.length);
                         setTimeout(function() {
                             inputNode.setSelectionRange(lastSpace, lastSpace);
