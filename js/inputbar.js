@@ -258,25 +258,25 @@ weechat.directive('inputBar', function() {
                     return true;
                 }
 
-/* TODO                // CMD+Left/Up -> switch to previous buffer
-                if ($event.metaKey && (code === 38 || code === 37)) {
-                    var previousBuffer = models.getPreviousBuffer();
-                    if (previousBuffer) {
-                        models.setActiveBuffer(previousBuffer.id);
-                        $event.preventDefault();
-                        return true;
-                    }
+                // CMD+Left/Up -> switch to previous buffer
+                if ($event.metaKey && (code === 37 || code === 38)) {
+                    var buffers = _.sortBy(models.getBuffers(), $rootScope.predicate)
+                    var curbuffer = buffers.indexOf(models.getActiveBuffer());
+                    var prevbuffer = (curbuffer == 0) ? buffers.length-1 : curbuffer-1;
+                    models.setActiveBuffer(buffers[prevbuffer]['id']);
+                    $event.preventDefault();
+                    return true;
                 }
 
                 // CMD+Right/Down -> switch to next buffer
                 if ($event.metaKey && (code === 39 || code === 40)) {
-                    var nextBuffer = models.getNextBuffer();
-                    if (nextBuffer) {
-                        models.setActiveBuffer(nextBuffer.id);
-                        $event.preventDefault();
-                        return true;
-                    }
-                }*/
+                    var buffers = _.sortBy(models.getBuffers(), $rootScope.predicate)
+                    var curbuffer = buffers.indexOf(models.getActiveBuffer());
+                    var nextbuffer = (curbuffer == buffers.length) ? 0 : curbuffer+1;
+                    models.setActiveBuffer(buffers[nextbuffer]['id']);
+                    $event.preventDefault();
+                    return true;
+                }
 
                 // CMD+G -> focus on buffer filter input
                 if ($event.metaKey && (code === 103 || code === 71)) {
