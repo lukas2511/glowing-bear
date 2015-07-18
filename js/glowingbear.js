@@ -15,6 +15,8 @@ weechat.config(['$compileProvider', function ($compileProvider) {
 
 weechat.controller('WeechatCtrl', ['$rootScope', '$scope', '$store', '$timeout', '$log', 'models', 'connection', 'notifications', 'utils', 'settings',
     function ($rootScope, $scope, $store, $timeout, $log, models, connection, notifications, utils, settings) {
+    window.rootScope = $rootScope;
+    window.scope = $scope;
 
     window.openBuffer = function(channel) {
         $scope.openBuffer(channel);
